@@ -18,6 +18,14 @@ public class GroupController(IGroupRepository repository) : Controller
 
         await repository.CreateGroup(groupDto);
 
-        return Ok("Success");
+        return Ok();
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetGroups()
+    {
+        var result = await repository.GetGroups();
+
+        return Ok(result);
     }
 }

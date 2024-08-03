@@ -18,7 +18,7 @@ public class UserController(IUserRepository repository) : Controller
 
         await repository.CreateUser(userDto);
 
-        return Ok("Success");
+        return Ok();
     }
     
     [HttpGet("get-users-with-groups")]

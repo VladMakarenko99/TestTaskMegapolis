@@ -19,4 +19,15 @@ public class GroupRepository(SqlConnectionFactory dbConnectionFactory) : IGroupR
             Name = groupDto.Name
         });
     }
+
+    public async Task<List<GetGroupDto>> GetGroups()
+    {
+        using var sqlConnection = dbConnectionFactory.CreateDbConnection();
+
+        var query = SelectGroups;
+        
+        var result = await sqlConnection.QueryAsync<GetGroupDto>(query);
+
+        return result.ToList();
+    }
 }

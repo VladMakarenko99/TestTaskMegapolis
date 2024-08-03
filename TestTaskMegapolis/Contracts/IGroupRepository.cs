@@ -5,4 +5,6 @@ namespace TestTaskMegapolis.Contracts;
 public interface IGroupRepository
 {
     Task CreateGroup(CreateGroupDto groupDto);
+    
+    Task<List<GetGroupDto>> GetGroups();
 }

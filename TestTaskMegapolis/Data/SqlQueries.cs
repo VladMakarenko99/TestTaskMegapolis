@@ -33,4 +33,8 @@ public static class SqlQueries
                                                     ORDER BY
                                                         u."Id";
                                                     """;
+
+    public const string SelectGroups = """
+                                       SELECT * FROM "Groups" ORDER BY "Id";
+                                       """;
 }
