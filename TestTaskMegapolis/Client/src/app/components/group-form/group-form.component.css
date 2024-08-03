@@ -1,0 +1,11 @@
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .invalid {
+    border-color: #dc3545;
+    color: #dc3545;
+  }
+
+  
