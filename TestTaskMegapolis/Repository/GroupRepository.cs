@@ -25,7 +25,6 @@ public class GroupRepository(SqlConnectionFactory dbConnectionFactory) : IGroupR
         using var sqlConnection = dbConnectionFactory.CreateDbConnection();
 
         var query = SelectGroups;
-        
         var result = await sqlConnection.QueryAsync<GetGroupDto>(query);
 
         return result.ToList();
