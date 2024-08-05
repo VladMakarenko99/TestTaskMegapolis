@@ -5,7 +5,7 @@ namespace TestTaskMegapolis.Data;
 
 public class SqlConnectionFactory(IConfiguration configuration)
 {
-    public IDbConnection CreateDbConnection()
+    public NpgsqlConnection CreateDbConnection()
     {
         var connectionString = configuration.GetConnectionString("TestDB");
 

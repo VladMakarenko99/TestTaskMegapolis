@@ -30,7 +30,6 @@ export class UserTableComponent implements OnInit {
       },
       error: (err) => {
         this.errorMessage = err.message;
-        console.error('Error fetching user groups:', err);
       }
     });
 

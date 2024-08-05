@@ -15,6 +15,7 @@ export class GroupFormComponent {
   groupForm: FormGroup;
   submitted = false;
   successMessage = '';
+  errorMessage: string | null = null;
 
   constructor(private formBuilder: FormBuilder, private groupService: GroupService) {
     this.groupForm = this.formBuilder.group({
@@ -45,7 +46,7 @@ export class GroupFormComponent {
         this.groupService.updateGroups();
       },
       error: (error) => {
-        console.error('Error adding group:', error);
+        this.errorMessage = error.message;
       }
     });
   }

@@ -3,7 +3,6 @@ using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using TestTaskMegapolis.Contracts;
 using TestTaskMegapolis.Data;
-using TestTaskMegapolis.DTOs;
 using TestTaskMegapolis.DTOs.User;
 using TestTaskMegapolis.Repository;
 
@@ -15,6 +14,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserDtoValidator>();
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<SqlConnectionFactory>();

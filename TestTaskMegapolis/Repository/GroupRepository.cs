@@ -10,11 +10,9 @@ public class GroupRepository(SqlConnectionFactory dbConnectionFactory) : IGroupR
 {
     public async Task CreateGroup(CreateGroupDto groupDto)
     {
-        using var sqlConnection = dbConnectionFactory.CreateDbConnection();
-        
-        var insertGroupQuery = InsertGroup;
-        
-        await sqlConnection.ExecuteAsync(insertGroupQuery, new
+        await using var sqlConnection = dbConnectionFactory.CreateDbConnection();
+
+        await sqlConnection.ExecuteAsync(InsertGroup, new
         {
             Name = groupDto.Name
         });
@@ -22,10 +20,9 @@ public class GroupRepository(SqlConnectionFactory dbConnectionFactory) : IGroupR
 
     public async Task<List<GetGroupDto>> GetGroups()
     {
-        using var sqlConnection = dbConnectionFactory.CreateDbConnection();
+        await using var sqlConnection = dbConnectionFactory.CreateDbConnection();
 
-        var query = SelectGroups;
-        var result = await sqlConnection.QueryAsync<GetGroupDto>(query);
+        var result = await sqlConnection.QueryAsync<GetGroupDto>(SelectGroups);
 
         return result.ToList();
     }

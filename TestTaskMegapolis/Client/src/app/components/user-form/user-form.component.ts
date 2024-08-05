@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { GroupService } from '../../services/group.service';
 import { UserService } from '../../services/user.service';
 
@@ -15,13 +14,14 @@ interface Group {
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.css'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule]
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class UserFormComponent implements OnInit {
   userForm: FormGroup;
   groups: Group[] = [];
   submitted = false;
   successMessage = '';
+  errorMessage: string | null = null;
 
   constructor(private formBuilder: FormBuilder, private groupService: GroupService, private userService: UserService) {
     this.userForm = this.formBuilder.group({
@@ -77,14 +77,13 @@ export class UserFormComponent implements OnInit {
 
     this.userService.createUser(user).subscribe({
       next: () => {
-        console.log('User added successfully');
         this.userForm.reset();
         this.submitted = false;
         this.successMessage = 'User added successfully!';
         this.userService.updateUsers(); 
       },
       error: (error) => {
-        console.error('Error adding user:', error);
+        this.errorMessage = error.message;
       }
     });
   }

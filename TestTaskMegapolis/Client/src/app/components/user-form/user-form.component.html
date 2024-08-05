@@ -36,5 +36,8 @@
         <div *ngIf="successMessage" class="alert alert-success mt-3">
             {{ successMessage }}
         </div>
+        <div class="alert alert-danger" *ngIf="errorMessage">
+            {{ errorMessage }}
+        </div>
     </form>
 </div>

@@ -10,35 +10,41 @@ public class UserRepository(SqlConnectionFactory dbConnectionFactory) : IUserRep
 {
     public async Task CreateUser(CreateUserDto userDto)
     {
-        using var sqlConnection = dbConnectionFactory.CreateDbConnection();
-
-        var insertUserQuery = InsertUser;
+        await using var sqlConnection = dbConnectionFactory.CreateDbConnection();
+        await sqlConnection.OpenAsync();
+        await using var transaction = await sqlConnection.BeginTransactionAsync();
         
-        var userId = await sqlConnection.QuerySingleAsync<int>(insertUserQuery, new
+        try
         {
-            userDto.FirstName,
-            userDto.LastName
-        });
-
-        var insertUserGroupQuery = InsertUserGroup;
-
-        foreach (var groupId in userDto.GroupIds)
-        {
-            await sqlConnection.ExecuteAsync(insertUserGroupQuery, new
+            var userId = await sqlConnection.QuerySingleAsync<int>(InsertUser, new
             {
-                UserId = userId,
-                GroupId = groupId
-            });
+                userDto.FirstName,
+                userDto.LastName
+            }, transaction);
+            
+            foreach (var groupId in userDto.GroupIds)
+            {
+                await sqlConnection.ExecuteAsync(InsertUserGroup, new
+                {
+                    UserId = userId,
+                    GroupId = groupId
+                }, transaction);
+            }
+
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
         }
     }
 
     public async Task<List<UserGroupsDto>> GetUsersWithGroups()
     {
-        using var sqlConnection = dbConnectionFactory.CreateDbConnection();
+        await using var sqlConnection = dbConnectionFactory.CreateDbConnection();
 
-        var query = SelectUserWithTheirGroups;
-        
-        var result = await sqlConnection.QueryAsync<UserGroupsDto>(query);
+        var result = await sqlConnection.QueryAsync<UserGroupsDto>(SelectUserWithTheirGroups);
 
         return result.ToList();
     }
